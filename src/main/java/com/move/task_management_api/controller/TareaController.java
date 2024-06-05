@@ -67,12 +67,11 @@ public class TareaController {
     @Operation(summary = "Crear una nueva tarea")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Tarea creada con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class))),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400))),
+        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400_TASK))),
         @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_401))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
-
     })
-    @PostMapping
+    @PostMapping("/crear")
     public ResponseEntity<TareaDto> crear(
             @Validated @RequestBody 
             @io.swagger.v3.oas.annotations.parameters.RequestBody(description = "Detalles de la tarea a crear", required = true, 
@@ -92,8 +91,7 @@ public class TareaController {
     @Operation(summary = "Obtener una tarea por su ID")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Tarea obtenida con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class))),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400))),
-        @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_401))),
+        @ApiResponse(responseCode = "403", description = "Acceso denegado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_403))),
         @ApiResponse(responseCode = "404", description = "Tarea no encontrada", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
@@ -103,10 +101,11 @@ public class TareaController {
         return ResponseEntity.ok(TareaMapper.INSTANCE.toDto(tareaService.obtenerPorId(uuid)));
     }
 
-    @Operation(summary = "Listar todas las tareas de un usuario")
+    @Operation(summary = "Listar todas las tareas del usuario logeado")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de tareas obtenida con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class))),
-        @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_401))),
+        @ApiResponse(responseCode = "200", description = "Lista de tareas obtenida con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class, type = "array"))),
+        @ApiResponse(responseCode = "403", description = "Acceso denegado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_403))),
+        @ApiResponse(responseCode = "404", description = "Tarea no encontrada", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
     @GetMapping("/all/byuser")
@@ -123,8 +122,10 @@ public class TareaController {
 
     @Operation(summary = "Listar tareas por estado")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de tareas obtenida con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class))),
-        @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_401))),
+        @ApiResponse(responseCode = "200", description = "Lista de tareas obtenida con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class, type = "array"))),
+        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400))),
+        @ApiResponse(responseCode = "403", description = "Acceso denegado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_403))),
+        @ApiResponse(responseCode = "404", description = "Tarea no encontrada", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
     @GetMapping("/estado/{estadoId}")
@@ -134,8 +135,9 @@ public class TareaController {
 
     @Operation(summary = "Listar todas las tareas")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de tareas obtenida con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class))),
-        @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_401))),
+        @ApiResponse(responseCode = "200", description = "Lista de tareas obtenida con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class, type = "array"))),
+        @ApiResponse(responseCode = "403", description = "Acceso denegado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_403))),
+        @ApiResponse(responseCode = "404", description = "Tarea no encontrada", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
     @GetMapping("/all")
@@ -146,7 +148,7 @@ public class TareaController {
     @Operation(summary = "Actualizar una tarea")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Tarea actualizada con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class))),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400))),
+        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400_TASK))),
         @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_401))),
         @ApiResponse(responseCode = "404", description = "Tarea no encontrada", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
@@ -171,9 +173,8 @@ public class TareaController {
 
     @Operation(summary = "Eliminar una tarea por ID")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Tarea eliminada con éxito", content = @Content(schema = @Schema(implementation = TareaDto.class))),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400))),
-        @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_401))),
+        @ApiResponse(responseCode = "200", description = "Tarea eliminada con éxito", content = @Content(schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "403", description = "Acceso denegado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_403))),
         @ApiResponse(responseCode = "404", description = "Tarea no encontrada", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
