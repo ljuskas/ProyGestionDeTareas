@@ -12,6 +12,6 @@ public interface ITareaService {
     Tarea       obtenerPorId(UUID tareaId);
     List<Tarea> listar();
     List<Tarea> listarPorUsuario(Usuario usuario);
-    List<Tarea> listarPorEstado(Integer estadoId);
+    List<Tarea> listarPorEstado(String estadoId);
 }
 

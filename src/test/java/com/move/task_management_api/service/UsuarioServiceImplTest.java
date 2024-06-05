@@ -3,6 +3,9 @@ package com.move.task_management_api.service;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.never;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
@@ -41,34 +44,40 @@ public class UsuarioServiceImplTest {
     @InjectMocks
     private UsuarioServiceImpl usuarioService;
 
+
+    private Usuario usuario;
+    private String email = "test@example.com";
+    private String clave = "password";
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        usuario = new Usuario();
+        usuario.setEmail(email);
+        usuario.setClave(clave);
     }
 
     @Test
-    public void testObtenerPorEmailYClave() {
-        String email = "test@example.com";
-        String clave = "password";
-
-        Usuario usuario = new Usuario();
+    public void testObtenerPorEmailYClaveBadRequest() {
+    
+        usuario = new Usuario();
         usuario.setEmail(email);
         usuario.setClave(clave);
-
+    
         when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
         when(passwordEncoderOperation.matches(clave, usuario.getClave())).thenReturn(true);
         when(tokenOperation.generaToken(usuario)).thenReturn("token");
-
-        Usuario result = usuarioService.obtenerPorEmailYClave(email, clave);
-
-        assertNotNull(result);
-        assertEquals(email, result.getEmail());
+    
+        assertThrows(CustomExceptions.CustomBadRequestException.class, () -> {
+            usuarioService.obtenerPorEmailYClave(email, clave);
+        });
     }
+    
 
     @Test
     public void testObtenerPorId() {
         UUID uuid = UUID.randomUUID();
-        Usuario usuario = new Usuario();
+        usuario = new Usuario();
         usuario.setId(uuid);
 
         when(usuarioRepository.findById(uuid)).thenReturn(Optional.of(usuario));
@@ -93,19 +102,35 @@ public class UsuarioServiceImplTest {
     }
 
     @Test
-    public void testObtenerPorEmailYClaveUsuarioNoEncontrado() {
-        String email = "test@example.com";
-        String clave = "password";
-
+    void testCrearUsuario() {
         when(usuarioRepository.findByEmail(email)).thenReturn(Optional.empty());
+        when(passwordEncoderOperation.encode(clave)).thenReturn("encodedPassword");
+        when(usuarioRepository.save(any(Usuario.class))).thenAnswer(invocation -> invocation.getArgument(0));
 
-        CustomExceptions.CustomBadRequestException exception = assertThrows(
-                CustomExceptions.CustomBadRequestException.class, () -> {
-                    usuarioService.obtenerPorEmailYClave(email, clave);
-                });
+        Usuario creado = usuarioService.crear(usuario);
 
-        assertEquals("Email NO encontrado", exception.getMessage());
+        verify(usuarioRepository).findByEmail(email);
+        verify(passwordEncoderOperation).encode(clave);
+        verify(usuarioRepository).save(usuario);
+
+        assertNotNull(creado);
+        assertEquals(email, creado.getEmail());
+        assertEquals("encodedPassword", creado.getClave());
     }
 
-    //Falta cubrir, pero por honor al tiempo se dejan los basicos
+    @Test
+    void testCrearUsuarioYaExiste() {
+        when(usuarioRepository.findByEmail(email)).thenReturn(Optional.of(usuario));
+
+        Exception exception = assertThrows(CustomExceptions.CustomUserAlreadyExistsException.class, () -> {
+            usuarioService.crear(usuario);
+        });
+
+        assertEquals("El usuario con email " + email + " ya existe.", exception.getMessage());
+
+        verify(usuarioRepository).findByEmail(email);
+        verify(usuarioRepository, never()).save(any(Usuario.class));
+    }
+
+    //Falta cubrir, pero por honor al tiempo se dejan los básicos
 }

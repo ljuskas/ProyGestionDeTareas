@@ -2,12 +2,16 @@ package com.move.task_management_api.service;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.doNothing;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -16,6 +20,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
 
 import com.move.task_management_api.exception.CustomExceptions;
 import com.move.task_management_api.model.EstadoTarea;
@@ -23,6 +28,7 @@ import com.move.task_management_api.model.Tarea;
 import com.move.task_management_api.model.Usuario;
 import com.move.task_management_api.repository.ITareaRespository;
 import com.move.task_management_api.service.impl.TareaServiceImpl;
+import com.move.task_management_api.service.strategy.CrearTareaOperation;
 
 public class TareaServiceImplTest {
 
@@ -35,9 +41,17 @@ public class TareaServiceImplTest {
     @InjectMocks
     private TareaServiceImpl tareaService;
 
+    @Mock
+    private CrearTareaOperation crearTareaOperation;
+
+    private Tarea tarea;
+
     @BeforeEach
     public void setup() {
         MockitoAnnotations.initMocks(this);
+        tarea = new Tarea();
+        tarea.setId(UUID.randomUUID());
+        tarea.setNombre("Tarea de prueba");
     }
 
     @Test
@@ -98,10 +112,10 @@ public class TareaServiceImplTest {
 
 @Test
     public void testListarTareasPorEstado() {
-        Integer estadoId = 1;
+        String estadoId = "1";
 
         EstadoTarea estadoTarea = new EstadoTarea();
-        estadoTarea.setId(estadoId); 
+        estadoTarea.setId(Integer.parseInt(estadoId)); 
         estadoTarea.setNombre("Estado de Ejemplo"); 
         estadoTarea.setDescripcion("Descripción del Estado de Ejemplo"); 
 
@@ -121,7 +135,7 @@ public class TareaServiceImplTest {
 
     @Test
     public void testListarTareasPorEstadoVacia() {
-        Integer estadoId = 1;
+        String estadoId = "1";
 
         when(tareaRepository.findAll()).thenReturn(new ArrayList<>());
         when(messageSource.getMessage(any(), any(), any(Locale.class))).thenReturn("Error");
@@ -132,5 +146,57 @@ public class TareaServiceImplTest {
                 });
 
         assertEquals("Error", exception.getMessage());
+    }
+
+    //OPERACIONES DE TAREA
+
+     @Test
+    void testCrearTarea() {
+        doNothing().when(crearTareaOperation).execute(tarea);
+
+        tareaService.ejecutarOperacion(tarea, crearTareaOperation);
+
+        verify(crearTareaOperation).execute(tarea);
+    }
+
+    @Test
+    void testObtenerTareaPorIdNotFound() {
+        UUID idTarea = UUID.randomUUID();
+        String errorMessage = "Tarea no encontrada";
+        when(messageSource.getMessage("error.not_found.tarea", null, LocaleContextHolder.getLocale())).thenReturn(errorMessage);
+        when(tareaRepository.findById(idTarea)).thenReturn(Optional.empty());
+
+        CustomExceptions.CustomNotFoundException exception = assertThrows(
+            CustomExceptions.CustomNotFoundException.class, () -> {
+                tareaService.obtenerPorId(idTarea);
+            });
+
+        assertEquals(errorMessage, exception.getMessage());
+    }
+
+    @Test
+    void testListarTareasPorEstadoInvalido() {
+        String estadoId = "abc"; // Estado inválido no numérico
+        IllegalArgumentException exception = assertThrows(
+            IllegalArgumentException.class, () -> {
+                tareaService.listarPorEstado(estadoId);
+            });
+
+        assertEquals("El estadoId debe ser numérico.", exception.getMessage());
+    }
+
+    @Test
+    void testListarTareasPorEstadoNoEncontrado() {
+        String estadoId = "1";
+        String errorMessage = "No se encontraron tareas para el estado";
+        when(messageSource.getMessage("error.not_found.tarea", null, LocaleContextHolder.getLocale())).thenReturn(errorMessage);
+        when(tareaRepository.findAll()).thenReturn(new ArrayList<>());
+
+        CustomExceptions.CustomNotFoundException exception = assertThrows(
+            CustomExceptions.CustomNotFoundException.class, () -> {
+                tareaService.listarPorEstado(estadoId);
+            });
+
+        assertEquals(errorMessage, exception.getMessage());
     }
 }

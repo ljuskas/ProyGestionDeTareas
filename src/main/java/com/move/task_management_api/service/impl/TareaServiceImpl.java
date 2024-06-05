@@ -18,6 +18,7 @@ import com.move.task_management_api.model.Usuario;
 import com.move.task_management_api.repository.ITareaRespository;
 import com.move.task_management_api.service.ITareaService;
 import com.move.task_management_api.service.strategy.ITareaOperation;
+
 @Service
 public class TareaServiceImpl implements ITareaService {
 
@@ -59,10 +60,13 @@ public class TareaServiceImpl implements ITareaService {
     }
 
     @Override
-    public List<Tarea> listarPorEstado(Integer estadoId) {
+    public List<Tarea> listarPorEstado(String estadoId) {
+        if (!estadoId.matches("\\d+")) { // Solo números positivos
+            throw new IllegalArgumentException("El estadoId debe ser numérico.");
+        }
         String errorMessage = messageSource.getMessage("error.not_found.tarea", null, LocaleContextHolder.getLocale());
         List<Tarea> tareas = tareaRepository.findAll().stream()
-                                             .filter(tarea -> Objects.nonNull(tarea.getEstado()) && tarea.getEstado().getId().equals(estadoId))
+                                             .filter(tarea -> Objects.nonNull(tarea.getEstado()) && tarea.getEstado().getId().equals(Integer.parseInt(estadoId)))
                                              .collect(Collectors.toList());
         if (tareas.isEmpty()) {
             throw new CustomExceptions.CustomNotFoundException(errorMessage);
