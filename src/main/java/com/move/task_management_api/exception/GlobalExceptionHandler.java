@@ -36,7 +36,7 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
         });
 
         String errorMessage = messageSource.getMessage("error.validation", null, LocaleContextHolder.getLocale());
-        ErrorResponse errorResponse = new ErrorResponse("ValidationError", errorMessage, errors);
+        ErrorResponse errorResponse = new ErrorResponse("validationError", errorMessage, errors);
         return new ResponseEntity<>(errorResponse, HttpStatus.BAD_REQUEST);
     }
 

@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -23,11 +22,13 @@ import com.move.task_management_api.service.strategy.ITareaOperation;
 @Service
 public class TareaServiceImpl implements ITareaService {
 
-    @Autowired
-    private ITareaRespository tareaRepository;
+    private final ITareaRespository tareaRepository;
+    private final MessageSource messageSource;
 
-    @Autowired
-    private MessageSource messageSource;
+    public TareaServiceImpl(ITareaRespository tareaRepository, MessageSource messageSource) {
+        this.tareaRepository = tareaRepository;
+        this.messageSource = messageSource;
+    }
 
     @Override
     @Transactional
@@ -59,14 +60,18 @@ public class TareaServiceImpl implements ITareaService {
     }
 
     @Override
-    public List<Tarea> listarPorEstado(Integer estadoId) {
+    public List<Tarea> listarPorEstado(String estadoId) {
+        if (!estadoId.matches("\\d+")) { // Solo números positivos
+            throw new IllegalArgumentException("El estadoId debe ser numérico.");
+        }
         String errorMessage = messageSource.getMessage("error.not_found.tarea", null, LocaleContextHolder.getLocale());
         List<Tarea> tareas = tareaRepository.findAll().stream()
-                                             .filter(tarea -> Objects.nonNull(tarea.getEstado()) && tarea.getEstado().getId().equals(estadoId))
+                                             .filter(tarea -> Objects.nonNull(tarea.getEstado()) && tarea.getEstado().getId().equals(Integer.parseInt(estadoId)))
                                              .collect(Collectors.toList());
         if (tareas.isEmpty()) {
             throw new CustomExceptions.CustomNotFoundException(errorMessage);
         }
         return tareas;
     }
+    
 }
