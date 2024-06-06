@@ -9,7 +9,9 @@ import javax.annotation.processing.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
+
     date = "2024-06-05T21:42:12-0400",
+
     comments = "version: 1.5.3.Final, compiler: Eclipse JDT (IDE) 3.38.0.v20240524-2033, environment: Java 17.0.11 (Eclipse Adoptium)"
 )
 public class UsuarioMapperImpl implements UsuarioMapper {
