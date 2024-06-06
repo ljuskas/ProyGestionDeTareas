@@ -59,7 +59,16 @@ Ejecutar el proyecto
 
     mvn spring-boot:run
 
-El servidor se iniciará en http://localhost:8080.
+_____________________________________
+# Vinculos internos 
+
+El servidor se iniciará en:   http://localhost:8080
+
+### [Archivo postman](https://github.com/ljuskas/ProyGestionDeTareas/blob/main/src/main/resources/TaskManager.postman_collection.json)
+
+### [Documentacion Swagger](http://localhost:8080/swagger-ui.html)
+
+_____________________________________
 
 # Informacion pre cargada
 
