@@ -1,0 +1,376 @@
+{
+	"info": {
+		"_postman_id": "1df9a8cd-fa4d-4dcc-9a8c-2add9abc9587",
+		"name": "TaskManager",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "31366194"
+	},
+	"item": [
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "public",
+					"item": [
+						{
+							"name": "createUser",
+							"request": {
+								"auth": {
+									"type": "noauth"
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombre\":\"Andres\",\n    \"email\":\"correo_2@gmail.com\",\n    \"clave\":\"12345678\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/public/usuario/crear"
+							},
+							"response": []
+						},
+						{
+							"name": "getAllUsers",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzY29uY2hhaEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCQweTVyZElyMnpwN3RtbllwMDZKQm51SWFuQmd5RjJsRnA1elVTZFc1TzBUYXZLR3llY1I1VyIsInN1YmplY3QiOiJTZWJhc3RpYW4iLCJleHAiOjE3MTc1MzgzMzksImlhdCI6MTcxNzUzNDczOSwiZW1haWwiOiJzY29uY2hhaEBnbWFpbC5jb20ifQ.acVa6oh_JuYZupoeerx86CKpbRMo6vJu3S7qWQZSvZT2NjbRWNh3Bl-NPCyaGuXtmeKK1sd0_uZFpNGIfvV-gw",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": "http://localhost:8080/api/public/usuario/all"
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "noauth"
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				},
+				{
+					"name": "privated",
+					"item": [
+						{
+							"name": "getUserById",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb25jaGFIZXJyZXJhU2ViYXN0aWFuQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHBuZ0htS1hJMFJ0TEVsVFJYWVgxLmUubTliRkRwUWVSTzJ4bDVJTUt5SkFkUGdmUHlEOXlXIiwic3ViamVjdCI6IkFuZHJlcyIsImV4cCI6MTcxNzU0NDU4MSwiaWF0IjoxNzE3NTQwOTgxLCJlbWFpbCI6ImNvbmNoYUhlcnJlcmFTZWJhc3RpYW5AZ21haWwuY29tIn0.yCbj4vyYOkeLNUcq134tJxY__q3JZ9anwVtIkL8N2Z9GYURmppSFNtJ2ZRdJPuhhv0ljbUNsE1hi9TPaYFmUNA",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:8080/api/private/usuario/b9bdcbee-e60c-4355-ab61-3e9e8bb45dd5"
+							},
+							"response": []
+						},
+						{
+							"name": "deleteUser",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzY29uY2hhaEBnbWFpbC5jb20iLCJwYXNzd29yZCI6IiQyYSQxMCRZOWhEQXQ3amJQVlRtTk9Fdm8xWDR1V0lkTzNKUmFWeUFQOUVUUnJXcWFBZnRwdmIxeTVSUyIsInN1YmplY3QiOiJTZWJhc3RpYW4iLCJleHAiOjE3MTc1Mzc3MzEsImlhdCI6MTcxNzUzNDEzMSwiZW1haWwiOiJzY29uY2hhaEBnbWFpbC5jb20ifQ.88xPevGtIR1aBH_YPN5Kjl4vicnT0qf2CzMR0jnIlW-wsGkAqkF7_c0HhOghgO7mh37A5rUQJfuh-VrSdRhwUg",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:8080/api/private/usuario/delete/b9bdcbee-e60c-4355-ab61-3e9e8bb45dd5"
+							},
+							"response": []
+						}
+					],
+					"auth": {
+						"type": "bearer",
+						"bearer": {
+							"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3JyZW9fdW5vQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJGYzcXRQcHZvZmlpaHhIelJybnNXT3VEYy9TWkhaQldWZWduaU51RU1UWUVxTHAvMGZrcEVtIiwic3ViamVjdCI6IlNlYmFzdGlhbiBDb25jaGEiLCJleHAiOjE3MTc2NDI1NzMsImlhdCI6MTcxNzYzODk3MywiZW1haWwiOiJjb3JyZW9fdW5vQGdtYWlsLmNvbSJ9.bqABaFEsEKll6Eeue9nO9d9ba_cbmzS6JxQN7HX5gR44vXYUqsZtEuQ9fPKWZO96albYgQmdSL7h6eJRIyACMA"
+						}
+					},
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"type": "text/javascript",
+								"packages": {},
+								"exec": [
+									""
+								]
+							}
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "noauth"
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Tareas",
+			"item": [
+				{
+					"name": "privated",
+					"item": [
+						{
+							"name": "createTask",
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3JyZW9fdW5vQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJGV4MGFYVk53TVJFT1phRUNudnJUQy4vaGc4Uk4xRjFCUnJHRko2bFdvSE01R1pEczdIQlVxIiwic3ViamVjdCI6IlNlYmFzdGlhbiBDb25jaGEiLCJleHAiOjE3MTc1NTA3NzEsImlhdCI6MTcxNzU0NzE3MSwiZW1haWwiOiJjb3JyZW9fdW5vQGdtYWlsLmNvbSJ9.lD6uWel9mepLdRxWd0iGOhFA_xcj1v3INEFbGR7S-t6Gd3nwRC91Ib7KEDwIix8q7f010PfYLZqPcJMlDsdkqQ",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"nombre\":\"tarea 3\",\n    \"descripcion\": \"Tarea 3 a realizar\",\n    \"estado\":{\n        \"id\":1\n    }\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/private/tarea/crear"
+							},
+							"response": []
+						},
+						{
+							"name": "getAllTaskByUser",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3JyZW9fdW5vQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJGV4MGFYVk53TVJFT1phRUNudnJUQy4vaGc4Uk4xRjFCUnJHRko2bFdvSE01R1pEczdIQlVxIiwic3ViamVjdCI6IlNlYmFzdGlhbiBDb25jaGEiLCJleHAiOjE3MTc1NTA3NzEsImlhdCI6MTcxNzU0NzE3MSwiZW1haWwiOiJjb3JyZW9fdW5vQGdtYWlsLmNvbSJ9.lD6uWel9mepLdRxWd0iGOhFA_xcj1v3INEFbGR7S-t6Gd3nwRC91Ib7KEDwIix8q7f010PfYLZqPcJMlDsdkqQ",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:8080/api/private/tarea/all/byuser"
+							},
+							"response": []
+						},
+						{
+							"name": "getTaskById",
+							"request": {
+								"method": "GET",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb25jaGFIZXJyZXJhU2ViYXN0aWFuQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJHBuZ0htS1hJMFJ0TEVsVFJYWVgxLmUubTliRkRwUWVSTzJ4bDVJTUt5SkFkUGdmUHlEOXlXIiwic3ViamVjdCI6IkFuZHJlcyIsImV4cCI6MTcxNzU0NDU4MSwiaWF0IjoxNzE3NTQwOTgxLCJlbWFpbCI6ImNvbmNoYUhlcnJlcmFTZWJhc3RpYW5AZ21haWwuY29tIn0.yCbj4vyYOkeLNUcq134tJxY__q3JZ9anwVtIkL8N2Z9GYURmppSFNtJ2ZRdJPuhhv0ljbUNsE1hi9TPaYFmUNA",
+										"type": "text"
+									}
+								],
+								"url": "http://localhost:8080/api/private/tarea/4fadf491-7994-4243-a929-7f2c00fd60be"
+							},
+							"response": []
+						},
+						{
+							"name": "updateTask",
+							"request": {
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Authorization",
+										"value": "Bearer ",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"id\":\"4fadf491-7994-4243-a929-7f2c00fd60be\",\n    \"comentarioModificacion\":\"Se realiza modificación del estado por otro usuario\",\n    \"estado\":{\n        \"id\":3\n    }\n\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": "http://localhost:8080/api/private/tarea/update/"
+							},
+							"response": []
+						},
+						{
+							"name": "getAllTask",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/private/tarea/all"
+							},
+							"response": []
+						},
+						{
+							"name": "deleteTask",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": "http://localhost:8080/api/private/tarea/delete/0936664f-52ca-49fb-ad77-75efb64b5912"
+							},
+							"response": []
+						},
+						{
+							"name": "getAllTaskByState",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": "http://localhost:8080/api/private/tarea/estado/1"
+							},
+							"response": []
+						}
+					]
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": {
+					"token": "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJjb3JyZW9fdW5vQGdtYWlsLmNvbSIsInBhc3N3b3JkIjoiJDJhJDEwJGYzcXRQcHZvZmlpaHhIelJybnNXT3VEYy9TWkhaQldWZWduaU51RU1UWUVxTHAvMGZrcEVtIiwic3ViamVjdCI6IlNlYmFzdGlhbiBDb25jaGEiLCJleHAiOjE3MTc2NDI1NzMsImlhdCI6MTcxNzYzODk3MywiZW1haWwiOiJjb3JyZW9fdW5vQGdtYWlsLmNvbSJ9.bqABaFEsEKll6Eeue9nO9d9ba_cbmzS6JxQN7HX5gR44vXYUqsZtEuQ9fPKWZO96albYgQmdSL7h6eJRIyACMA"
+				}
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"packages": {},
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "loginUser",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"correo_uno@gmail.com\",\n    \"clave\":\"12345678\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": "http://localhost:8080/api/public/auth/login"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Estados",
+			"item": [
+				{
+					"name": "getAllStateTask",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": "http://localhost:8080/api/public/tarea/estado"
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"packages": {},
+				"exec": [
+					""
+				]
+			}
+		}
+	]
+}
