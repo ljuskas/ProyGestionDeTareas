@@ -6,7 +6,6 @@ import java.util.UUID;
 
 import javax.transaction.Transactional;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.MessageSource;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.stereotype.Service;
@@ -21,22 +20,22 @@ import com.move.task_management_api.service.strategy.ITokenOperation;
 @Service
 public class UsuarioServiceImpl implements IUsuarioService {
 
-    @Autowired
-    private IUsuarioRepository usuarioRepository;
+    private final IUsuarioRepository usuarioRepository;
+    private final IPasswordEncoderOperation passwordEncoderOperation;
+    private final ITokenOperation tokenOperation;
+    private final MessageSource messageSource;
 
-    @Autowired
-    private IPasswordEncoderOperation passwordEncoderOperation;
-
-    @Autowired
-    private ITokenOperation tokenOperation;
-
-    @Autowired
-    private MessageSource messageSource;
+    public UsuarioServiceImpl(IUsuarioRepository usuarioRepository, IPasswordEncoderOperation passwordEncoderOperation,
+                              ITokenOperation tokenOperation, MessageSource messageSource) {
+        this.usuarioRepository = usuarioRepository;
+        this.passwordEncoderOperation = passwordEncoderOperation;
+        this.tokenOperation = tokenOperation;
+        this.messageSource = messageSource;
+    }
 
     @Override
     public Usuario obtenerPorEmailYClave(String email, String clave) {
         String errorMessage = messageSource.getMessage("error.bad_request", null, LocaleContextHolder.getLocale());
-
         return usuarioRepository.findByEmail(email)
                 .filter(user -> passwordEncoderOperation.matches(clave, user.getClave()))
                 .map(this::generarTokenYActualizar)
@@ -61,7 +60,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    @Transactional 
+    @Transactional
     public Usuario crear(Usuario usuario) {
         usuarioRepository.findByEmail(usuario.getEmail())
                 .ifPresent(existingUsuario -> {
@@ -73,7 +72,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    @Transactional 
+    @Transactional
     public void eliminar(UUID uuid) {
         String errorMessage = messageSource.getMessage("error.not_found.usuario", null, LocaleContextHolder.getLocale());
 
@@ -84,7 +83,7 @@ public class UsuarioServiceImpl implements IUsuarioService {
     }
 
     @Override
-    @Transactional 
+    @Transactional
     public Usuario actualizar(Usuario usuario) {
         return usuarioRepository.save(usuario);
     }

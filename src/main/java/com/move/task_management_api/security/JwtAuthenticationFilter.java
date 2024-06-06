@@ -76,7 +76,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String requestMethod = request.getMethod();
         request.getSession().setAttribute("error", message);
 
-        if ("DELETE".equalsIgnoreCase(requestMethod)||"POST".equalsIgnoreCase(requestMethod)) {
+        if ("DELETE".equalsIgnoreCase(requestMethod)||"POST".equalsIgnoreCase(requestMethod)||"PUT".equalsIgnoreCase(requestMethod)) {
             response.sendRedirect(errorPage);
         } else {
             if (!response.isCommitted()) {

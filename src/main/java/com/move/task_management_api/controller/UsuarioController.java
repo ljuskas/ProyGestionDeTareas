@@ -45,8 +45,8 @@ public class UsuarioController {
     @Operation(summary = "Crear un nuevo usuario")
     @ApiResponses(value = {
         @ApiResponse(responseCode = "200", description = "Usuario creado con éxito", content = @Content(schema = @Schema(implementation = UsuarioDto.class))),
-        @ApiResponse(responseCode = "400", description = "Solicitud inválida", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400))),
-        @ApiResponse(responseCode = "401", description = "No autorizado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_401))),
+        @ApiResponse(responseCode = "400", description = "Bad request", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_400_USER))),
+        @ApiResponse(responseCode = "409", description = "Correo ya registrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_409))),
         @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
     @PostMapping("/public/usuario/crear")
@@ -62,8 +62,10 @@ public class UsuarioController {
 
     @Operation(summary = "Obtener un usuario por su ID", security = {@SecurityRequirement(name = "bearerAuth")})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Get Data View", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema= @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "DEFAULT", description = "Default error.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))) 
+        @ApiResponse(responseCode = "200", description = "Usuario creado con éxito", content = @Content(schema = @Schema(implementation = UsuarioDto.class))),
+        @ApiResponse(responseCode = "403", description = "Acceso denegado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_403))),
+        @ApiResponse(responseCode = "404", description = "Dato no encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
     @GetMapping("/private/usuario/{id}")
     public ResponseEntity<UsuarioDto> obternerPorId(@ValidUUID @PathVariable String id) {
@@ -74,8 +76,9 @@ public class UsuarioController {
 
     @Operation(summary = "Listar todos los usuarios")
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Lista de usuarios obtenida con éxito", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema= @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "DEFAULT", description = "Default error.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))) 
+        @ApiResponse(responseCode = "200", description = "Lista obtenida con éxito", content = @Content(schema = @Schema(implementation = UsuarioDto.class, type = "array"))),
+        @ApiResponse(responseCode = "404", description = "Dato no encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
     @GetMapping("/public/usuario/all")
     public ResponseEntity<List<UsuarioDto>> listar() {
@@ -85,8 +88,10 @@ public class UsuarioController {
 
     @Operation(summary = "Eliminar un usuario por su ID", security = {@SecurityRequirement(name = "bearerAuth")})
     @ApiResponses(value = {
-        @ApiResponse(responseCode = "200", description = "Usuario eliminado satisfactoriamente.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema= @Schema(implementation = String.class))),
-        @ApiResponse(responseCode = "DEFAULT", description = "Default error.", content = @Content(mediaType = MediaType.APPLICATION_JSON_VALUE, schema = @Schema(implementation = ErrorResponse.class))) 
+        @ApiResponse(responseCode = "200", description = "Usuario eliminado con éxito", content = @Content(schema = @Schema(implementation = String.class))),
+        @ApiResponse(responseCode = "403", description = "Acceso denegado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_403))),
+        @ApiResponse(responseCode = "404", description = "Dato no encontrado", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_404))),
+        @ApiResponse(responseCode = "500", description = "Error interno del servidor", content = @Content(schema = @Schema(implementation = ErrorResponse.class), examples = @ExampleObject(value = ErrorResponseExamples.ERROR_500)))
     })
     @DeleteMapping("/private/usuario/delete/{id}")
     public ResponseEntity<String> eliminarPorId(@ValidUUID @PathVariable String id) {

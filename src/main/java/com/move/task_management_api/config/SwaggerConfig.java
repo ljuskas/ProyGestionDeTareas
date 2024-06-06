@@ -21,9 +21,9 @@ public class SwaggerConfig {
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
                 .info(new Info()
-                        .title("API Documentation")
+                        .title("API Documentation: Gestión Tareas y Usuarios")
                         .version("1.0")
-                        .description("Documentación API gestión de tareas y usuarios"))
+                        .description("Documentación API para MOVEapp"))
                 .addSecurityItem(new io.swagger.v3.oas.models.security.SecurityRequirement()
                         .addList("bearerAuth"));
     }
