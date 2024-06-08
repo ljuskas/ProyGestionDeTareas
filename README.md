@@ -122,8 +122,8 @@ _____________________________________
     * Cuerpo de la solicitud:
       
             {
-                "nombre": "Andres",
-                "email": "correo_2@gmail.com"
+                "email": "correo_2@gmail.com".
+				"clave": "12345678"
             }
 
 2. **Obtener Todos los Usuarios**
